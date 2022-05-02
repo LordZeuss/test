@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Install NGINX
 
 #Followed this guide: https://www.linuxcapable.com/how-to-install-modsecurity-with-nginx-on-rocky-linux-8/
@@ -92,6 +94,7 @@ elif [ "$yesorno" = e ]; then
 else
   echo "Not a valid answer. Exiting..."
   exit 1
+fi
 
 ##########################################################################
 
@@ -103,7 +106,7 @@ else
         echo "Would you like to allow it temporarily until nginx is restarted or permanently?"
         echo "t=temporarily | p=permanently"
         read -n1 -p "Answer:" answer
-          if [ "$answer" = t ]
+          if [ "$answer" = t ]; then
             sudo firewall-cmd --zone=public --add-service=http
             sudo firewall-cmd --zone=public --add-service=https
             sudo firewall-cmd --reload
@@ -115,26 +118,17 @@ else
       			echo "Visit http://server_domain_name_or_IP"
           else
             echo "Not a valid answer. Exiting..."
-            break
+            exit 1
           fi
     elif [ "$firewall" = n ]; then
 			echo "Cancelling http/https service addition"
-			break
-    elif [ "$yesorno" = e ]; then
+			exit 1
+    elif [ "$firewall" = e ]; then
       echo "Goodbye!"
       exit 1
     else
-			break
+	exit 1
 		fi
-elif [ "$yesorno" = n ]; then
-	echo "Skipping NGINX Install..."
-elif [ "$yesorno" = e ]; then
-	echo "Goodbye!"
-	exit 1
-else
-	echo "Not a valid answer. Exiting..."
-	exit 1
-fi
 
 
 
